@@ -139,7 +139,7 @@
             left: 0; top: 0;
             height: 100%; width: 0;
             background: var(--primary-glow);
-            animation: loadProgress 2s linear forwards 0.8s;
+            animation: loadProgress 2.s linear forwards 0.8s;
         }
 
         @keyframes loadProgress {
@@ -169,7 +169,7 @@
             transform: scale(1);
         }
 
-        .iframe-container {
+        .video-container {
             max-width: 850px;
             width: 100%;
             aspect-ratio: 16/9;
@@ -180,10 +180,12 @@
             border: 1px solid #222;
         }
 
-        .iframe-container iframe {
+        .video-container video {
             width: 100%;
             height: 100%;
-            border: none;
+            display: block;
+            outline: none;
+            object-fit: contain;
         }
 
         /* Downside Brand Tag */
@@ -214,8 +216,8 @@
     </div>
 
     <div class="video-wrapper" id="videoSection">
-        <div class="iframe-container">
-            <iframe id="mainPlayer" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <div class="video-container">
+            <video id="mainPlayer" controls playsinline></video>
         </div>
         <div class="brand-footer">
             Designed & Developed by: <span id="footerNameTag">DESIGNER NAME</span>
@@ -224,11 +226,11 @@
 
 <script>
     // =========================================================================
-    // CONFIGURATION: PASTE YOUR DATA HERE
+    // CONFIGURATION: EDIT YOUR NAME HERE
     // =========================================================================
     const CONFIG = {
-        youtubeUrl: "https://files.catbox.moe/wp2eq7.mp4", // <-- Paste your YouTube link here
-        designerName: "OM K.DUBEY" // <-- Type your name here
+        videoUrl: "https://files.catbox.moe/wp2eq7.mp4", 
+        designerName: "OM KUMAR DUBEY" // <-- Just type your name here!
     };
     // =========================================================================
 
@@ -236,24 +238,11 @@
     document.getElementById('designerNameTag').innerText = CONFIG.designerName;
     document.getElementById('footerNameTag').innerText = CONFIG.designerName;
 
-    function extractVideoId(url) {
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : null;
-    }
-
     function startExperience() {
         const landing = document.getElementById('landingSection');
         const splash = document.getElementById('splashScreen');
         const videoSection = document.getElementById('videoSection');
         const player = document.getElementById('mainPlayer');
-
-        const videoId = extractVideoId(CONFIG.youtubeUrl);
-
-        if (!videoId) {
-            alert("Error: The hardcoded YouTube link in the configuration script is invalid.");
-            return;
-        }
 
         // Hide landing button frame
         landing.style.opacity = '0';
@@ -264,14 +253,19 @@
             splash.classList.add('active');
         }, 400);
 
-        // Hold splash duration, prep embed stream, then fade smoothly into the player viewport
+        // Hold splash duration, assign video asset src, and transition viewports
         setTimeout(() => {
-            // Using privacy-enhanced domain to minimize local file origin blocking policies
-            player.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`;
+            // Assign direct MP4 source
+            player.src = CONFIG.videoUrl;
             
             splash.classList.remove('active');
             videoSection.classList.add('show');
-        }, 3200); // 3.2 seconds total splash layout duration
+
+            // Intentionally handle trigger browser autoplay rules
+            player.play().catch(error => {
+                console.log("Autoplay delayed pending user explicit control activation:", error);
+            });
+        }, 3000); // 3 seconds total splash layout duration
     }
 </script>
 

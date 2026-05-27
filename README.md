@@ -227,7 +227,7 @@
     // CONFIGURATION: PASTE YOUR DATA HERE
     // =========================================================================
     const CONFIG = {
-        youtubeUrl: "https://youtube.com/shorts/wtbNKJGA7Kg?si=Zhvchs-w-femMvK1", // <-- Paste your YouTube link here
+        youtubeUrl: "https://files.catbox.moe/wp2eq7.mp4", // <-- Paste your YouTube link here
         designerName: "OM K.DUBEY" // <-- Type your name here
     };
     // =========================================================================
